@@ -1,0 +1,66 @@
+﻿@model Daily.Data.Models.Event
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Event</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Describe)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Describe)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Summary)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Summary)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Period)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Period)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NewPeriod)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NewPeriod)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NewPeriodTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NewPeriodTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.EventId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
