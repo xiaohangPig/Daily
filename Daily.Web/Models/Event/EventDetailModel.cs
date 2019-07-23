@@ -15,15 +15,15 @@ namespace Daily.Web.Models.Event
         public string Summary { get; set; }
         //起始时间
         public DateTime StartTime { get; set; }
-        //持续时间
-        public DateTime? Duration { get; set; }
+        //持续天数
+        public int? Duration { get; set; }
         //邮箱
         public string Email { get; set; }
-        //周期
-        public DateTime Period { get; set; }
-        //新周期
-        public DateTime? NewPeriod { get; set; }
-        //新周期时间
+        //重复频率
+        public int Period { get; set; }
+        //新重复天数
+        public int? NewPeriod { get; set; }
+        //新重复开始时间
         public DateTime? NewPeriodTime { get; set; }
     }
 }

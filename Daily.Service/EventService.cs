@@ -18,7 +18,7 @@ namespace Daily.Service
             _context = context;
         }
 
-        public void Add(Event newEvent)
+        public void Creat(Event newEvent)
         {
             _context.Add(newEvent);
             _context.SaveChanges();
@@ -26,14 +26,9 @@ namespace Daily.Service
 
         public void DeletById(int id)
         {
-            var deletEvent =  _context.Events
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.EventId == id);
-            
-            db.DimCustomer.Update(updatedCustomer);
-            db.Savechanges();
-
-            return RedirectToAction("CustomerList");
+            var deletEvent =  _context.Events.Find(id);
+            _context.Events.Remove(deletEvent);
+             _context.SaveChangesAsync();
         }
 
         public Event Get(int id)
@@ -46,9 +41,19 @@ namespace Daily.Service
             return _context.Events;
         }
 
-        public void UpdateById(int id)
+        //public void UpdateById(int id)
+        //{
+        //    _context.Find(id);
+        //    _context.Update(updateEvent);
+        //    _context.SaveChanges();
+
+        //}
+
+        public void UpdateByEntity(Event @event)
         {
-            throw new NotImplementedException();
+            _context.Update(@event);
+            _context.SaveChanges();
+
         }
     }
 }

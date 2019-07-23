@@ -7,6 +7,6 @@ namespace Daily.Web.Models.Event
 {
     public class EventIndexModel
     {
-        public IEnumerable<EventDetailModel> Patrons { get; set; }
+        public IEnumerable<EventDetailModel> Events { get; set; }
     }
 }

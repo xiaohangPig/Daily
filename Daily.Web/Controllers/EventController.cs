@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Daily.Data;                                                                           
+﻿using Daily.Data;
 using Daily.Data.Models;
-using Daily.Web.Models;
 using Daily.Web.Models.Event;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 namespace Daily.Web.Controllers
 {
     public class EventController : Controller
     {
-        private readonly IEventService _context;
+        private readonly IEventService _service;
+        private readonly EventDbContext _context;
 
-        public EventController(IEventService context)
+        public EventController(IEventService service, EventDbContext context)
         {
+            _service = service;
             _context = context;
+
         }
 
         // GET: @event 
         public IActionResult Index()    
         {
-            var allEvents = _context.GetAll();
-
+            
             //创建一个新的模型类
-            var eventModels = allEvents
+            var eventModels = _service.GetAll()
                 .Select(p => new EventDetailModel
                 {
                     EventId = p.EventId,
@@ -39,38 +35,37 @@ namespace Daily.Web.Controllers
                     Period = p.Period,
                     StartTime = p.StartTime,
                     Summary = p.Summary
-
                 }).ToList();
 
             var model = new EventIndexModel
             {
-                Patrons = eventModels
+                Events = eventModels
             };
 
             return View(model);
         }
 
         // GET: @event /Details/5
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
             if (id == 0)
             {
                 return NotFound();
             }
 
-            var @event = _context.Get(id);
+            var @event = _service.Get(id);
             //创建一个新的模型类
             var models = new EventDetailModel
                 {
-                    EventId = @event .EventId,
-                    Describe = @event .Describe,
-                    Duration = @event .Duration,
-                    Email = @event .Email,
-                    NewPeriod = @event .NewPeriod,
-                    NewPeriodTime = @event .NewPeriodTime,
-                    Period = @event .Period,
-                    StartTime = @event .StartTime,
-                    Summary = @event .Summary
+                    EventId = @event.EventId,
+                    Describe = @event.Describe,
+                    Duration = @event.Duration,
+                    Email = @event.Email,
+                    NewPeriod = @event.NewPeriod,
+                    NewPeriodTime = @event.NewPeriodTime,
+                    Period = @event.Period,
+                    StartTime = @event.StartTime,
+                    Summary = @event.Summary
 
                 };
             if (@event == null)
@@ -88,43 +83,38 @@ namespace Daily.Web.Controllers
         }
 
         // POST: @event /Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventId,Describe,Summary,StartTime,Duration,Email,Period,NewPeriod,NewPeriodTime")] Event @event)
+        public IActionResult Create([Bind("EventId,Describe,Summary,StartTime,Duration,Email,Period,NewPeriod,NewPeriodTime")] Event @event)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
+                _service.Creat(@event);
                 return RedirectToAction(nameof(Index));
             }
             return View(@event);
-        }
+        }        
 
         // GET: @event /Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
+            var eventToUpdate = _service.Get(id);
+            if (eventToUpdate == null)
             {
                 return NotFound();
             }
-            return View(@event);
+            return View(eventToUpdate);
         }
 
         // POST: @event /Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,Describe,Summary,StartTime,Duration,Email,Period,NewPeriod,NewPeriodTime")] Event @event)
+        public IActionResult Edit(int id, [Bind("EventId,Describe,Summary,StartTime,Duration,Email,Period,NewPeriod,NewPeriodTime")] Event @event)
         {
             if (id != @event.EventId)
             {
@@ -135,8 +125,8 @@ namespace Daily.Web.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
-                    await _context.SaveChangesAsync();
+                    _service.UpdateByEntity(@event);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -155,16 +145,15 @@ namespace Daily.Web.Controllers
         }
 
         // GET: @event /Delete/5
-        //根据id删除
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.EventId == id);
+            var @event = _context.Events
+                .FirstOrDefault(m => m.EventId == id);
             if (@event == null)
             {
                 return NotFound();
@@ -176,11 +165,11 @@ namespace Daily.Web.Controllers
         // POST: @event /Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var @event = await _context.Events.FindAsync(id);
-            _context.Events.Remove(@event);
-            await _context.SaveChangesAsync();
+            var confirmedEvent = _context.Events.Find(id);
+            _context.Events.Remove(confirmedEvent);
+            _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

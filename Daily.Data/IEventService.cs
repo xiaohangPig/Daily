@@ -13,10 +13,14 @@ namespace Daily.Data
         //根据ID获取
         Event Get(int id);
         //添加
-        void Add(Event newEvent);
+        void Creat(Event newEvent);
         //根据ID删除
         void DeletById(int id);
-        //根据ID更新
-        void UpdateById(int id);
+        ////根据ID更新
+        //void UpdateById(int id);
+
+        //根据实体更新
+        void UpdateByEntity(Event @event);
+
     }
 }

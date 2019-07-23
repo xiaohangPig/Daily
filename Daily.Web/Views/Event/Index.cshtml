@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Daily.Data.Models.Event>
-
+﻿@using Daily.Web.Models.Event
+@model Daily.Web.Models.Event.EventIndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "Event Index";
 }
 
-<h2>Index</h2>
+<h2>Event Index</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,65 +13,64 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Describe)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Describe)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Summary)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Duration)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Period)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().NewPeriod)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Period)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewPeriod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewPeriodTime)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().NewPeriodTime)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Describe)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Period)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NewPeriod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NewPeriodTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Events)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Describe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Summary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Period)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewPeriod)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewPeriodTime)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
